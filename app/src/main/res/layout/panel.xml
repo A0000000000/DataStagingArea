@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xyz.maoyanluo.datastagingarea.floatball.PanelView
+<xyz.maoyanluo.datastagingarea.floatball.floatwindow.floatview.PanelView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/panel"
         android:layout_width="match_parent"
@@ -17,4 +17,4 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-</xyz.maoyanluo.datastagingarea.floatball.PanelView>
+</xyz.maoyanluo.datastagingarea.floatball.floatwindow.floatview.PanelView>

@@ -1,4 +1,4 @@
-package xyz.maoyanluo.datastagingarea.floatball
+package xyz.maoyanluo.datastagingarea.floatball.floatwindow
 
 import android.graphics.PixelFormat
 import android.view.Gravity
@@ -8,7 +8,9 @@ import android.view.WindowManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import xyz.maoyanluo.datastagingarea.R
+import xyz.maoyanluo.datastagingarea.floatball.FloatBallController
 import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.floatview.PanelView
 import xyz.maoyanluo.datastagingarea.floatball.rv.BaseViewHolder
 import xyz.maoyanluo.datastagingarea.floatball.rv.FloatBallAdapter
 import java.io.Closeable

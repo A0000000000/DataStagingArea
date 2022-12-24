@@ -1,4 +1,4 @@
-package xyz.maoyanluo.datastagingarea.floatball
+package xyz.maoyanluo.datastagingarea.floatball.floatwindow.floatview
 
 import android.content.Context
 import android.os.Handler

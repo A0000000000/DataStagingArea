@@ -1,4 +1,4 @@
-package xyz.maoyanluo.datastagingarea.floatball
+package xyz.maoyanluo.datastagingarea.floatball.floatwindow
 
 import android.content.ClipData
 import android.graphics.PixelFormat
@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import xyz.maoyanluo.datastagingarea.R
+import xyz.maoyanluo.datastagingarea.floatball.FloatBallController
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.floatview.TriggerView
 import java.io.Closeable
 
 class Trigger(private val controller: FloatBallController): Closeable {
