@@ -3,7 +3,7 @@ package xyz.maoyanluo.datastagingarea.floatball.rv
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-open class BaseViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+open class BaseViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
     companion object {
 
