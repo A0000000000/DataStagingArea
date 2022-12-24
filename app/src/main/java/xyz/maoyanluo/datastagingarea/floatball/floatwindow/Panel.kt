@@ -11,8 +11,8 @@ import xyz.maoyanluo.datastagingarea.R
 import xyz.maoyanluo.datastagingarea.floatball.FloatBallController
 import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.floatview.PanelView
-import xyz.maoyanluo.datastagingarea.floatball.rv.BaseViewHolder
-import xyz.maoyanluo.datastagingarea.floatball.rv.FloatBallAdapter
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh.BaseViewHolder
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.adapter.FloatBallAdapter
 import java.io.Closeable
 
 class Panel(private val controller: FloatBallController, private val ds: BaseDataSource): Closeable{

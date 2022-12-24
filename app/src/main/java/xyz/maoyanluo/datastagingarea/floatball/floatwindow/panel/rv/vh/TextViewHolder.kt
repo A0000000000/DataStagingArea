@@ -1,10 +1,10 @@
-package xyz.maoyanluo.datastagingarea.floatball.rv
+package xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh
 
 import android.content.ClipData
 import android.view.View
 import android.widget.TextView
 import xyz.maoyanluo.datastagingarea.R
-import xyz.maoyanluo.datastagingarea.floatball.model.TextModel
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model.TextModel
 
 class TextViewHolder(private val view: View): BaseViewHolder(view) {
 

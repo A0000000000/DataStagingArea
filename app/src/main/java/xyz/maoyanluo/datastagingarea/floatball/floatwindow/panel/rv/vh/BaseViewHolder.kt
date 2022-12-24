@@ -1,4 +1,4 @@
-package xyz.maoyanluo.datastagingarea.floatball.rv
+package xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView

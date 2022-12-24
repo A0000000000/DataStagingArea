@@ -1,6 +1,6 @@
 package xyz.maoyanluo.datastagingarea.floatball.ds
 
-import xyz.maoyanluo.datastagingarea.floatball.model.BaseModel
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model.BaseModel
 
 abstract class BaseDataSource {
 

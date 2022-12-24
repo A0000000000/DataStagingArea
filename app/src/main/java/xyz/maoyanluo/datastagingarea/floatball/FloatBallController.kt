@@ -7,7 +7,7 @@ import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
 import xyz.maoyanluo.datastagingarea.floatball.ds.MemoryDataSource
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.Panel
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.Trigger
-import xyz.maoyanluo.datastagingarea.floatball.model.TextModel
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model.TextModel
 
 class FloatBallController(val context: Context) {
 

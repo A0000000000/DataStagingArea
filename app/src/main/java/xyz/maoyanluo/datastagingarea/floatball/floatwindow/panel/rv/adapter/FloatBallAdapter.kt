@@ -1,4 +1,4 @@
-package xyz.maoyanluo.datastagingarea.floatball.rv
+package xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import xyz.maoyanluo.datastagingarea.R
 import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
-import xyz.maoyanluo.datastagingarea.floatball.model.TextModel
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model.TextModel
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh.BaseViewHolder
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh.TextViewHolder
 
 class FloatBallAdapter(private val ds: BaseDataSource?, context: Context): RecyclerView.Adapter<BaseViewHolder>() {
 
