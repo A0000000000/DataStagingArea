@@ -1,13 +1,17 @@
 package xyz.maoyanluo.datastagingarea.floatball.rv
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
+import xyz.maoyanluo.datastagingarea.R
 import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
 import xyz.maoyanluo.datastagingarea.floatball.model.TextModel
 
-class FloatBallAdapter(private val ds: BaseDataSource?): RecyclerView.Adapter<BaseViewHolder>() {
+class FloatBallAdapter(private val ds: BaseDataSource?, context: Context): RecyclerView.Adapter<BaseViewHolder>() {
+
+    private val layoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         when (viewType) {
@@ -15,7 +19,7 @@ class FloatBallAdapter(private val ds: BaseDataSource?): RecyclerView.Adapter<Ba
                 return BaseViewHolder(View(parent.context))
             }
             BaseViewHolder.TYPE_TEXT -> {
-                return TextViewHolder(RelativeLayout(parent.context))
+                return TextViewHolder(layoutInflater.inflate(R.layout.vh_text, null))
             }
             BaseViewHolder.TYPE_IMAGE -> {
                 return BaseViewHolder(View(parent.context))

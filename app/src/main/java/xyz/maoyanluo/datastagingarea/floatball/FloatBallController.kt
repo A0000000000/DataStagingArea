@@ -7,31 +7,23 @@ import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
 import xyz.maoyanluo.datastagingarea.floatball.ds.MemoryDataSource
 import xyz.maoyanluo.datastagingarea.floatball.model.TextModel
 
-class FloatBallController(var context: Context) {
-
-    fun initialize() {
-        createTrigger()
-        createPanel()
-    }
-
-    fun dispose() {
-
-    }
+class FloatBallController(val context: Context) {
 
     private var trigger: Trigger? = null
     private var panel: Panel? = null
-    private var ds: BaseDataSource = MemoryDataSource()
+    private var isInit = false
 
+    private val ds: BaseDataSource = MemoryDataSource()
     private val triggerListener = object: Trigger.TriggerListener {
-        override fun onTriggerShow() {
+        override fun onTriggerViewShow() {
 
         }
 
-        override fun onTriggerHide() {
+        override fun onTriggerViewHide() {
 
         }
 
-        override fun onTriggerSide() {
+        override fun onTrigger() {
             panel?.showView()
         }
 
@@ -39,13 +31,12 @@ class FloatBallController(var context: Context) {
             if (data.description?.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) == true) {
                 for (i in 0 until data.itemCount) {
                     ds.addItem(TextModel(data.getItemAt(i).text.toString()))
-                    panel?.dataChange()
+                    panel?.dataAppendOne()
                 }
             }
         }
 
     }
-
     private val panelListener = object: Panel.PanelListener {
         override fun onPanelOpen() {
             trigger?.hideView()
@@ -55,6 +46,24 @@ class FloatBallController(var context: Context) {
             trigger?.showView()
         }
 
+    }
+
+    fun initialize() {
+        if (!isInit) {
+            isInit = true
+            createTrigger()
+            createPanel()
+        }
+    }
+
+    fun dispose() {
+        if (isInit) {
+            isInit = false
+            trigger?.close()
+            panel?.close()
+            trigger = null
+            panel = null
+        }
     }
 
     private fun createTrigger() {

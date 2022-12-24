@@ -12,19 +12,8 @@ import kotlin.math.abs
 
 class TriggerView(context: Context, attrs: AttributeSet? = null): FrameLayout(context, attrs) {
 
-    interface TriggerViewListener {
-        fun onTriggerLeftSide()
-        fun onSingleTouch()
-    }
 
     var triggerViewListener: TriggerViewListener? = null
-
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        gestureDetector.onTouchEvent(event)
-        return super.onTouchEvent(event)
-    }
-
     private val gestureDetector = GestureDetector(context, object: OnGestureListener {
         override fun onDown(e: MotionEvent?): Boolean {
             return false
@@ -35,7 +24,7 @@ class TriggerView(context: Context, attrs: AttributeSet? = null): FrameLayout(co
         }
 
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            triggerViewListener?.onSingleTouch()
+            triggerViewListener?.onTriggerByTouch()
             return true
         }
 
@@ -49,11 +38,21 @@ class TriggerView(context: Context, attrs: AttributeSet? = null): FrameLayout(co
 
         override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
             if (abs(velocityX) >= 500 && abs((e1?.x ?: 0f) - (e2?.x ?: 0f)) > 100) {
-                triggerViewListener?.onTriggerLeftSide()
+                triggerViewListener?.onTriggerBySide()
                 return true
             }
             return false
         }
     }, Handler(Looper.getMainLooper()))
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gestureDetector.onTouchEvent(event)
+        return super.onTouchEvent(event)
+    }
+
+    interface TriggerViewListener {
+        fun onTriggerBySide()
+        fun onTriggerByTouch()
+    }
 
 }

@@ -1,78 +1,108 @@
 package xyz.maoyanluo.datastagingarea.floatball
 
-import android.graphics.Color
+import android.graphics.PixelFormat
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
-import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import xyz.maoyanluo.datastagingarea.R
 import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
+import xyz.maoyanluo.datastagingarea.floatball.rv.BaseViewHolder
 import xyz.maoyanluo.datastagingarea.floatball.rv.FloatBallAdapter
+import java.io.Closeable
 
-class Panel(private val controller: FloatBallController, private val ds: BaseDataSource) {
-
-    interface PanelListener {
-        fun onPanelOpen()
-        fun onPanelClose()
-    }
+class Panel(private val controller: FloatBallController, private val ds: BaseDataSource): Closeable{
 
     var panelListener: PanelListener? = null
-    private var panelView: PanelView? = null
     private var adapter: FloatBallAdapter? = null
+    private var isWindowCreated = false
 
     private val windowManager = controller.context.getSystemService(WindowManager::class.java)
-
-    private fun createViewInner(): View {
-        val panelView = PanelView(controller.context)
-        this.panelView = panelView
-        panelView.setBackgroundColor(Color.GRAY)
-        panelView.panelViewListener = object: PanelView.PanelViewListener {
-            override fun onTouchOutSideListener() {
-                hideView()
-            }
+    private val layoutInflater = LayoutInflater.from(controller.context)
+    private val view = layoutInflater.inflate(R.layout.panel, null) as PanelView
+    private val panelViewListener = object: PanelView.PanelViewListener {
+        override fun onTouchOutSideListener() {
+            hideView()
         }
-        val listView = RecyclerView(controller.context)
-        val linearLayoutManager = LinearLayoutManager(controller.context)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-        val listViewParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-        val adapter = FloatBallAdapter(ds)
-        this.adapter = adapter
-        listView.layoutManager = linearLayoutManager
-        listView.adapter = adapter
-        panelView.addView(listView, listViewParams)
-        return panelView
     }
 
-    private fun createView() {
-        val view = createViewInner()
-        val params = WindowManager.LayoutParams()
-        val bounds = windowManager.currentWindowMetrics.bounds
-        params.width = 400
-        params.height = WindowManager.LayoutParams.MATCH_PARENT
-        params.gravity = Gravity.NO_GRAVITY
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-        params.x = bounds.right / 2
-        params.y = - bounds.bottom / 2
-        params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        windowManager.addView(view, params)
+    init {
+        view.panelViewListener = panelViewListener
+        initRecycleView()
     }
 
     fun showView() {
-        if (panelView == null) {
-            createView()
+        if (!isWindowCreated) {
+            windowManager.addView(view, createWindowLayoutParams())
+            isWindowCreated = true
         }
-        panelView?.visibility = View.VISIBLE
+        view.visibility = View.VISIBLE
         panelListener?.onPanelOpen()
     }
 
     fun hideView() {
-        panelView?.visibility = View.GONE
+        if (!isWindowCreated) {
+            return
+        }
+        view.visibility = View.GONE
         panelListener?.onPanelClose()
     }
 
-    fun dataChange() {
-        adapter?.notifyDataSetChanged()
+    fun dataAppendOne() {
+        adapter?.let {
+            it.notifyItemInserted(it.itemCount - 1)
+        }
+    }
+
+    override fun close() {
+        if (isWindowCreated) {
+            windowManager.removeView(view)
+            isWindowCreated = false
+        }
+    }
+
+    private fun initRecycleView() {
+        val listView = view.findViewById<RecyclerView>(R.id.data_list)
+        val linearLayoutManager = createRecyclerViewLayoutManager()
+        val adapter = createRecyclerViewAdapter()
+        listView.layoutManager = linearLayoutManager
+        listView.adapter = adapter
+    }
+
+    private fun createRecyclerViewLayoutManager(): RecyclerView.LayoutManager {
+        val linearLayoutManager = LinearLayoutManager(controller.context)
+        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        return linearLayoutManager
+    }
+
+    private fun createRecyclerViewAdapter(): RecyclerView.Adapter<BaseViewHolder> {
+        val adapter = FloatBallAdapter(ds, controller.context)
+        this.adapter = adapter
+        return adapter
+    }
+
+    private fun createWindowLayoutParams(): WindowManager.LayoutParams {
+        val params = WindowManager.LayoutParams()
+
+        // Todo: 位置和大小抽离出来
+        val bounds = windowManager.currentWindowMetrics.bounds
+        params.width = 400
+        params.height = WindowManager.LayoutParams.MATCH_PARENT
+        params.x = bounds.right / 2
+        params.y = - bounds.bottom / 2
+
+        params.gravity = Gravity.NO_GRAVITY
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        params.format = PixelFormat.RGBA_8888
+        params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        return params
+    }
+
+    interface PanelListener {
+        fun onPanelOpen()
+        fun onPanelClose()
     }
 
 }

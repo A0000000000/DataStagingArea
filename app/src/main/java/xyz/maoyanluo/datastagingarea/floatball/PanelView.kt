@@ -7,10 +7,6 @@ import android.widget.FrameLayout
 
 class PanelView(context: Context, attrs: AttributeSet? = null): FrameLayout(context, attrs) {
 
-    interface PanelViewListener {
-        fun onTouchOutSideListener()
-    }
-
     var panelViewListener: PanelViewListener? = null
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -22,6 +18,10 @@ class PanelView(context: Context, attrs: AttributeSet? = null): FrameLayout(cont
 
     private fun onTouchOutSide() {
         panelViewListener?.onTouchOutSideListener()
+    }
+
+    interface PanelViewListener {
+        fun onTouchOutSideListener()
     }
 
 }

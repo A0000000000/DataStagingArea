@@ -1,74 +1,53 @@
 package xyz.maoyanluo.datastagingarea.floatball
 
 import android.content.ClipData
-import android.content.ClipDescription
-import android.graphics.Color
+import android.graphics.PixelFormat
 import android.view.DragEvent
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import xyz.maoyanluo.datastagingarea.R
+import java.io.Closeable
 
-
-class Trigger(private val controller: FloatBallController) {
-
-    interface TriggerListener {
-        fun onTriggerShow()
-        fun onTriggerHide()
-        fun onTriggerSide()
-        fun onDataDrop(data: ClipData)
-    }
+class Trigger(private val controller: FloatBallController): Closeable {
 
     var triggerListener: TriggerListener? = null
-    private var triggerView: TriggerView? = null
+    private var isWindowCreated = false
 
     private val windowManager = controller.context.getSystemService(WindowManager::class.java)
+    private val layoutInflater = LayoutInflater.from(controller.context)
+    private val view = layoutInflater.inflate(R.layout.trigger, null) as TriggerView
+    private val viewStyle = view.findViewById<View>(R.id.trigger_style)
+    private val triggerViewListener =  object: TriggerView.TriggerViewListener {
 
-    private fun createViewInner(): View {
-        val triggerView = TriggerView(controller.context)
-        this.triggerView = triggerView
-        triggerView.setBackgroundColor(Color.RED)
-        triggerView.triggerViewListener = object: TriggerView.TriggerViewListener {
-            override fun onTriggerLeftSide() {
-                triggerListener?.onTriggerSide()
-            }
-
-            override fun onSingleTouch() {
-                triggerListener?.onTriggerSide()
-            }
-
+        override fun onTriggerBySide() {
+            triggerListener?.onTrigger()
         }
-        return triggerView
+
+        override fun onTriggerByTouch() {
+            triggerListener?.onTrigger()
+        }
+
     }
 
-    private fun createView() {
-        val view = createViewInner()
-        val params = WindowManager.LayoutParams()
-        params.width = 50
-        params.height = 300
-        params.gravity = Gravity.NO_GRAVITY
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-        val bounds = windowManager.currentWindowMetrics.bounds
-        params.x = bounds.right / 2
-        params.y = - bounds.bottom / 3
-        params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        bindDragAndDrop(view)
-        windowManager.addView(view, params)
-    }
-
-
-    private fun bindDragAndDrop(view: View) {
-        view.setOnDragListener { v, event ->
+    init {
+        view.triggerViewListener = triggerViewListener
+        view.setOnDragListener { _, event ->
             event?.let {
                 when (it.action) {
                     DragEvent.ACTION_DROP -> {
                         it.clipData?.let { data ->
                             triggerListener?.onDataDrop(data)
                         }
-                        view.layoutParams.width = 50
-                        view.layoutParams = view.layoutParams
-
+                        viewStyle.setBackgroundColor(controller.context.getColor(R.color.trigger_bg))
                     }
-
+                    DragEvent.ACTION_DRAG_ENTERED -> {
+                        viewStyle.setBackgroundColor(controller.context.getColor(R.color.trigger_bg_active))
+                    }
+                    DragEvent.ACTION_DRAG_EXITED -> {
+                        viewStyle.setBackgroundColor(controller.context.getColor(R.color.trigger_bg))
+                    }
                     else -> {
                         // ignore
                     }
@@ -79,17 +58,48 @@ class Trigger(private val controller: FloatBallController) {
     }
 
     fun showView() {
-        if (triggerView == null) {
-            createView()
+        if (!isWindowCreated) {
+            windowManager.addView(view, createWindowLayoutParams())
+            isWindowCreated = true
         }
-        triggerView?.visibility = View.VISIBLE
-        triggerListener?.onTriggerShow()
+        view.visibility = View.VISIBLE
+        triggerListener?.onTriggerViewShow()
     }
 
     fun hideView() {
-        triggerView?.visibility = View.GONE
-        triggerListener?.onTriggerHide()
+        view.visibility = View.GONE
+        triggerListener?.onTriggerViewHide()
     }
 
+    override fun close() {
+        if (isWindowCreated) {
+            isWindowCreated = false
+            windowManager.removeView(view)
+        }
+    }
+
+    private fun createWindowLayoutParams(): WindowManager.LayoutParams {
+        val params = WindowManager.LayoutParams()
+
+        // Todo: 位置和大小抽离出来
+        params.width = 50
+        params.height = 300
+        val bounds = windowManager.currentWindowMetrics.bounds
+        params.x = bounds.right / 2
+        params.y = - bounds.bottom / 3
+
+        params.format = PixelFormat.RGBA_8888
+        params.gravity = Gravity.NO_GRAVITY
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        return params
+    }
+
+    interface TriggerListener {
+        fun onTriggerViewShow()
+        fun onTriggerViewHide()
+        fun onTrigger()
+        fun onDataDrop(data: ClipData)
+    }
 
 }

@@ -4,6 +4,10 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import xyz.maoyanluo.datastagingarea.floatball.FloatBallController
 
+/**
+ * 用于管理创建FloatBallController的类
+ * Todo: 后续将逻辑抽离到Service中, 不再监听Activity的生命周期
+ */
 class MainActivityLifecycleObserver(private val mainActivity: MainActivity): DefaultLifecycleObserver {
 
     private var flag = false
