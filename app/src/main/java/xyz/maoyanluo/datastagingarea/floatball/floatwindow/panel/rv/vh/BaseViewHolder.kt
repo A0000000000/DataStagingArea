@@ -10,7 +10,6 @@ open class BaseViewHolder(view: View): RecyclerView.ViewHolder(view) {
         const val TYPE_UNKNOWN = -1
         const val TYPE_TEXT = 0
         const val TYPE_IMAGE = 1
-        const val TYPE_FILE = 2
 
     }
 

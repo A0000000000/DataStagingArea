@@ -6,7 +6,7 @@ import xyz.maoyanluo.datastagingarea.floatball.FloatBallController
 
 /**
  * 用于管理创建FloatBallController的类
- * Todo: 后续将逻辑抽离到Service中, 不再监听Activity的生命周期
+ * Todo: 后续将逻辑抽离到Service中, 不再监听Activity的生命周期 --> 问题: URI访问权限需要绑定到一个Activity, 后续调研如何解决
  */
 class MainActivityLifecycleObserver(private val mainActivity: MainActivity): DefaultLifecycleObserver {
 

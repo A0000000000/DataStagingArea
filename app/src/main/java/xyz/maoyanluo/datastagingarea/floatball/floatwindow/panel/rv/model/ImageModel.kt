@@ -1,14 +1,15 @@
 package xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model
 
 import android.content.ClipData
+import android.net.Uri
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh.BaseViewHolder
 
-class TextModel(data: ClipData.Item): BaseModel() {
+class ImageModel(val mimeType: String, data: ClipData.Item): BaseModel() {
+
+    val uri: Uri = data.uri
 
     init {
-        type = BaseViewHolder.TYPE_TEXT
+        type = BaseViewHolder.TYPE_IMAGE
     }
-
-    val text = data.text.toString()
 
 }

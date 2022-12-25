@@ -12,4 +12,5 @@
     <color name="trigger_bg">#FFFF0000</color>
     <color name="transparent">#00000000</color>
     <color name="vh_text_bg">#FF66CCFF</color>
+    <color name="vh_image_bg">#FF66FFCC</color>
 </resources>

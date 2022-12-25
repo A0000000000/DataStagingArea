@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import xyz.maoyanluo.datastagingarea.R
 import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model.ImageModel
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model.TextModel
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh.BaseViewHolder
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh.ImageViewHolder
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.vh.TextViewHolder
 
 class FloatBallAdapter(private val ds: BaseDataSource?, context: Context): RecyclerView.Adapter<BaseViewHolder>() {
@@ -24,7 +26,7 @@ class FloatBallAdapter(private val ds: BaseDataSource?, context: Context): Recyc
                 return TextViewHolder(layoutInflater.inflate(R.layout.vh_text, null))
             }
             BaseViewHolder.TYPE_IMAGE -> {
-                return BaseViewHolder(View(parent.context))
+                return ImageViewHolder(layoutInflater.inflate(R.layout.vh_image, null))
             }
             else -> {
                 return BaseViewHolder(View(parent.context))
@@ -37,8 +39,14 @@ class FloatBallAdapter(private val ds: BaseDataSource?, context: Context): Recyc
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        if (holder is TextViewHolder) {
-            holder.onBindData(ds?.getDataAt(position) as TextModel)
+        val baseModel = ds?.getDataAt(position)
+        when (holder) {
+            is TextViewHolder -> {
+                holder.onBindData(baseModel as TextModel)
+            }
+            is ImageViewHolder -> {
+                holder.onBindData(baseModel as ImageModel)
+            }
         }
     }
 

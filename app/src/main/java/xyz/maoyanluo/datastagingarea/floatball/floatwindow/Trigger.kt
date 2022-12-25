@@ -1,5 +1,6 @@
 package xyz.maoyanluo.datastagingarea.floatball.floatwindow
 
+import android.app.Activity
 import android.content.ClipData
 import android.graphics.PixelFormat
 import android.view.DragEvent
@@ -40,6 +41,7 @@ class Trigger(private val controller: FloatBallController): Closeable {
                 when (it.action) {
                     DragEvent.ACTION_DROP -> {
                         it.clipData?.let { data ->
+                            (view.context as Activity).requestDragAndDropPermissions(event)
                             triggerListener?.onDataDrop(data)
                         }
                         viewStyle.setBackgroundColor(controller.context.getColor(R.color.trigger_bg))

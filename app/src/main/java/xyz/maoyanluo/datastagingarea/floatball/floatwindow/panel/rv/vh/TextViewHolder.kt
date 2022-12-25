@@ -17,7 +17,7 @@ class TextViewHolder(private val view: View): BaseViewHolder(view) {
         view.setOnLongClickListener {
             val clipData = ClipData.newPlainText(data.text, data.text)
             val dragShadowBuilder = View.DragShadowBuilder(view)
-            it.startDragAndDrop(clipData, dragShadowBuilder, null, View.DRAG_FLAG_GLOBAL)
+            it.startDragAndDrop(clipData, dragShadowBuilder, null, View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ)
             return@setOnLongClickListener true
         }
     }

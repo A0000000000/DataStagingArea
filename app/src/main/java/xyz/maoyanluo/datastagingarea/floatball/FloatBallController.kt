@@ -7,6 +7,7 @@ import xyz.maoyanluo.datastagingarea.floatball.ds.BaseDataSource
 import xyz.maoyanluo.datastagingarea.floatball.ds.MemoryDataSource
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.Panel
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.Trigger
+import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model.ImageModel
 import xyz.maoyanluo.datastagingarea.floatball.floatwindow.panel.rv.model.TextModel
 
 class FloatBallController(val context: Context) {
@@ -30,9 +31,14 @@ class FloatBallController(val context: Context) {
         }
 
         override fun onDataDrop(data: ClipData) {
-            if (data.description?.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) == true) {
-                for (i in 0 until data.itemCount) {
-                    ds.addItem(TextModel(data.getItemAt(i).text.toString()))
+            for (i in 0 until data.itemCount) {
+                val mimeType = data.description?.getMimeType(i)
+                if (mimeType == ClipDescription.MIMETYPE_TEXT_PLAIN) {
+                    ds.addItem(TextModel(data.getItemAt(i)))
+                    panel?.dataAppendOne()
+                }
+                if (mimeType?.contains("image") == true) {
+                    ds.addItem(ImageModel(mimeType, data.getItemAt(i)))
                     panel?.dataAppendOne()
                 }
             }
