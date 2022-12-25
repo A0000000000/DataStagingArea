@@ -41,6 +41,7 @@ class Trigger(private val controller: FloatBallController): Closeable {
                 when (it.action) {
                     DragEvent.ACTION_DROP -> {
                         it.clipData?.let { data ->
+                            // Tips: 这里这样写很不合理，但是我暂时想不到别的方式解决了
                             (view.context as Activity).requestDragAndDropPermissions(event)
                             triggerListener?.onDataDrop(data)
                         }
